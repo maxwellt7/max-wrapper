@@ -1,10 +1,10 @@
-import { supabase } from "@/lib/utils/supabase/service";
+import { getServiceClient } from "@/lib/utils/supabase/service";
 
 export async function updateUserProfile(
   userEmail: string,
   purchaseType: string
 ) {
-  const { error: updateError } = await supabase
+  const { error: updateError } = await getServiceClient()
     .from("profiles")
     .update({ purchase: purchaseType })
     .eq("email", userEmail.toLowerCase());
@@ -15,7 +15,7 @@ export async function updateUserProfile(
 }
 
 export async function addUserCredits(userEmail: string, creditsToAdd: number) {
-  const { data: user, error: selectError } = await supabase
+  const { data: user, error: selectError } = await getServiceClient()
     .from("profiles")
     .select("credits")
     .eq("email", userEmail.toLowerCase())
@@ -29,7 +29,7 @@ export async function addUserCredits(userEmail: string, creditsToAdd: number) {
   const currentCredits = user.credits || 0;
   const newCredits = currentCredits + creditsToAdd;
 
-  const { error: updateError } = await supabase
+  const { error: updateError } = await getServiceClient()
     .from("profiles")
     .update({ credits: newCredits })
     .eq("email", userEmail.toLowerCase());
@@ -54,7 +54,7 @@ export async function updatePurchasesTable(
     provider: provider || "lemonsqueezy",
   };
 
-  const { error: insertError } = await supabase
+  const { error: insertError } = await getServiceClient()
     .from("purchases")
     .insert([insertSubscriptionsPayload]);
 

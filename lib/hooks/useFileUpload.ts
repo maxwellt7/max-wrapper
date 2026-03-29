@@ -2,7 +2,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import s3 from "@/lib/clients/cloudflare";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
-import { supabase } from "@/lib/utils/supabase/service";
+import { getServiceClient } from "@/lib/utils/supabase/service";
 
 interface UploadOptions {
   file?: {
@@ -127,7 +127,7 @@ export async function uploadFile({
 
     // Only store metadata if not skipped and userId is provided
     if (!skipMetadata && userId) {
-      const { error } = await supabase.from("file_uploads").insert({
+      const { error } = await getServiceClient().from("file_uploads").insert({
         user_id: userId,
         chat_id: chatId,
         context: `${uploadPath}:${contentType}`,

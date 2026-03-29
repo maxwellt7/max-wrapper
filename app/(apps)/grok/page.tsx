@@ -2,7 +2,7 @@ import InputCapture from "@/components/(apps)/input/input";
 import PaymentModal from "@/components/(ui-components)/paywall/Payment";
 import { toolConfig } from "./toolConfig";
 import { UserGenerations } from "@/components/(apps)/dashboard/text-generations";
-import { supabase } from "@/lib/utils/supabase/service";
+import { getServiceClient } from "@/lib/utils/supabase/service";
 import {
   getUserGenerations,
   getSession,
@@ -18,6 +18,7 @@ async function getPublicGenerations(page: number = 1) {
   const end = start + REPORTS_PER_PAGE - 1;
 
   try {
+    const supabase = getServiceClient();
     const { count } = await supabase
       .from("generations")
       .select("*", { count: "exact", head: true })
